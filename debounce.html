@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .click {
+        width: 300px;
+        height: 300px;
+        background-color: burlywood;
+    }
+</style>
+
+<body>
+    <div class="click" onclick="processChange()"></div>
+    <div class="input">
+        <input oninput="processChange()"></input>
+        <p></p>
+    </div>
+</body>
+<script>
+    // immediate用来决定是否要第一次立即执行, 默认为false
+    function debounce(func, timeout = 1000, immediate = false) {
+        let timer;
+        // isImmediateInvoke变量用来记录是否立即执行, 默认为false
+        let isImmediateInvoke = false;
+        return (...args) => {
+            clearTimeout(timer);
+            // 当是第一次触发，并且需要触发第一次事件
+            if (!isImmediateInvoke && immediate) {
+                const result = func.apply(this, args)
+                // 将isImmediateInvoke设置为true，这样不会影响到后面频繁触发的函数调用
+                isImmediateInvoke = true;
+                return;
+            }
+            timer = setTimeout(() => {
+                func.apply(this, args);
+                // 将isImmediateInvoke设置为false，这样下一次的第一次触发事件才能被立即执行
+                isImmediateInvoke = false
+            }, timeout);
+        };
+    }
+
+    function saveInput() {
+        const text = document.querySelector('.input>input').value;
+        document.querySelector('.input>p').innerHTML = text;
+        console.log(text);
+    }
+    const processChange = debounce(() => saveInput(), 500);
+</script>
+
+</html>

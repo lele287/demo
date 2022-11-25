@@ -1,0 +1,111 @@
+<html>
+	<title>test</title>
+	<body>
+		<div
+			id="canvasParcel"
+			style="
+				position: absolute;
+				top: 25%;
+				left: 25%;
+				cursor: default;
+				z-index: 999999999;
+			"
+		>
+			<canvas
+				id="canvas"
+				width="800px"
+				height="300px"
+			></canvas>
+			<button onclick="exportSignature(this)">
+				确定
+			</button>
+			<button onclick="empty(this)">清空</button>
+		</div>
+		<div id="exportImg"></div>
+	</body>
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+	<script>
+		// 加载画布
+		var canvaDom = document.getElementById("canvas") // 画布对象
+		var context = canvaDom.getContext("2d") // 画板的上下文
+		var canvasX = canvaDom.getBoundingClientRect().left // 画板的坐标x
+		var canvasY = canvaDom.getBoundingClientRect().top // 画板的坐标y
+		context.fillStyle = "gray" // 画布背景色
+		context.lineWidth = 4 // 线的宽度
+		context.strokeStyle = "white" // 线的颜色
+		context.fillRect(
+			0,
+			0,
+			canvaDom.width,
+			canvaDom.height
+		) // 画板的范围
+		canvaDom.addEventListener("mousedown", down, false) // 鼠标按下去的事件
+		canvaDom.addEventListener("mousemove", draw, false) // 鼠标移动事件
+		canvaDom.addEventListener("mouseup", up, false) // 鼠标松开事件
+
+		// 鼠标按下
+		var canvaDom
+		var onoff = false // 锁定开关
+		var oldx = canvasX // 起始坐标x
+		var oldy = canvasY // 起始坐标y
+		var newx // 结束坐标x
+		var newy // 结束坐标y
+
+		function down(event) {
+			onoff = true // 打开开关
+			oldx = event.clientX - canvasX // 鼠标在画板中点击的X的坐标
+			oldy = event.clientY - canvasY // 鼠标在画板中点击的Y的坐标
+			context.beginPath() // 开始路径
+		}
+
+		// 鼠标移动
+		function draw(event) {
+			// 开关
+			if (onoff) {
+				newx = event.clientX - canvasX
+				newy = event.clientY - canvasY
+				context.moveTo(oldx, oldy) // 线的起点坐标
+				context.lineTo(newx, newy) // 线的始点坐标
+				context.stroke() // 初始化到画布中
+				oldx = newx
+				oldy = newy
+			}
+		}
+		// 鼠标离开
+		function up() {
+			onoff = false // 关闭开关
+			context.closePath() // 关闭路径
+		}
+
+		// 清空
+		function empty() {
+			context.clearRect(
+				0,
+				0,
+				canvaDom.width,
+				canvaDom.height
+			) // 清空的范围
+			context.fillRect(
+				0,
+				0,
+				canvaDom.width,
+				canvaDom.height
+			) // 重设的范围
+		}
+
+		//导出信息
+		function exportSignature() {
+			var exportImg = canvas.toDataURL(
+				"image/png",
+				0.1
+			) // 0.1代表压缩的比率，默认为1
+			console.info(exportImg)
+			$("#exportImg").append(
+				"<img src='" +
+					exportImg +
+					"' style='width:100px;margin-right:20px;'/>"
+			)
+			empty()
+		}
+	</script>
+</html>
