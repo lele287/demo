@@ -40,7 +40,7 @@ export class Request {
     this.interceptorsResponse();
   }
 
-  async get<T = any>(
+  async get<T>(
     url: string,
     params?: T,
     config?: AxiosRequestConfig
@@ -52,7 +52,7 @@ export class Request {
     return data;
   }
 
-  async post<T = any>(
+  async post<T>(
     url: string,
     data?: T,
     params?: T,
@@ -65,7 +65,7 @@ export class Request {
     return res;
   }
 
-  async delete<T = any>(
+  async delete<T>(
     url: string,
     data?: T,
     params?: T,
@@ -79,7 +79,7 @@ export class Request {
     return res;
   }
 
-  async patch<T = any>(
+  async patch<T>(
     url: string,
     data?: T,
     params?: T,
