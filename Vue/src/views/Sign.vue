@@ -73,8 +73,7 @@ function reset() {
 const imgUrl = ref<string>();
 function preserve() {
   if (!cvs.value) return;
-  const dataURL = cvs.value.toDataURL();
-  imgUrl.value = dataURL;
+  imgUrl.value = cvs.value.toDataURL();
   reset();
 }
 </script>

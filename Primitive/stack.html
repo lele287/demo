@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // 单调栈算法
+        function getNearLess(arr) {
+            let stack = []
+            let list = []
+            arr.forEach((item, index) => {
+                while (stack.length && arr[stack[stack.length - 1]] > item) {
+                    let pop = stack.pop()
+                    let start = [stack[stack.length - 1] ? stack[stack.length - 1][stack[stack.length - 1].length - 1] : -1, arr[stack[stack.length - 1]] || -1]
+                    let end = [index, item]
+                    let current = []
+                    pop.forEach(a => {
+                        current = [a, arr[a]]
+                        list.push({ current, start, end })
+                    })
+                }
+                if (stack[stack.length - 1] === index) {
+                    stack[stack[stack.length - 1]] = [...stack[stack[stack.length - 1], index]]
+                } else {
+                    stack.push([index])
+                }
+            });
+            while (stack.length) {
+                let pop = stack.pop()
+                let start = [stack[stack.length - 1] ? stack[stack.length - 1][stack[stack.length - 1].length - 1] : -1, arr[stack[stack.length - 1]] || -1]
+                let end = [-1, -1]
+                let current = []
+                pop.forEach(a => {
+                    current = [a, arr[a]]
+                    list.push({ current, start, end })
+                })
+            }
+            return list.sort((a, b) => a.current[0] - b.current[0])
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
